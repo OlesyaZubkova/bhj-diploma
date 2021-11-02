@@ -26,10 +26,7 @@
    * из локального хранилища
    * */
   static current() {
-    if (localStorage.user) {
-      return JSON.parse(localStorage.user);   
-    } 
-      return undefined;
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   /**
@@ -100,18 +97,17 @@
    * Производит выход из приложения. После успешного
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
-  static logout(data, callback) {
+  static logout(callback) {
     createRequest({
       url: this.URL + '/logout',
       method: 'POST',
       responseType: 'json',
-      data,
       callback: (err, response) => {
-        if (response && response.user) {
+        if (response && response.success) {
           this.unsetCurrent();
         }
         callback(err, response);
       }
     });
   }
-}
+ }

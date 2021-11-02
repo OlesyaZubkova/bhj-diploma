@@ -42,9 +42,10 @@ class Sidebar {
       } else if (e.target.closest('.menu-item_login')) {
         App.getModal('login').open();
       } else if (e.target.closest('.menu-item_logout')) {
-        const data = User.current();
-        User.logout(data, (err, response) => {
-          if (response.success === true) {
+        User.logout((err, response) => {
+          if (err) {
+            console.log('Ошибка!') 
+          } else if (response.success) {
             App.setState('init');
           }
         });
