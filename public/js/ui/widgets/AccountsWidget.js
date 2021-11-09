@@ -56,7 +56,10 @@ class AccountsWidget {
       Account.list(data, (err, response) => {
         if (response && response.success) {
           this.clear();
-          this.renderItem(response.data);
+
+          for (let elem of response.data) {
+            this.renderItem(elem);
+          }
         }
       });
     }
@@ -106,8 +109,6 @@ class AccountsWidget {
    * и добавляет его внутрь элемента виджета
    * */
   renderItem(data) {
-    for (let elem of data) {
-      this.element.insertAdjacentHTML('beforeend', this.getAccountHTML(elem));
-    }
+      this.element.insertAdjacentHTML('beforeend', this.getAccountHTML(data));
   }
 }
