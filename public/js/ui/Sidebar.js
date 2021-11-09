@@ -33,7 +33,7 @@ class Sidebar {
    * При нажатии на кнопку выхода вызывает User.logout и по успешному
    * выходу устанавливает App.setState( 'init' )
    * */
-  static initAuthLinks() {
+   static initAuthLinks() {
     const sidebarPanel = document.querySelector('.sidebar');
 
     sidebarPanel.addEventListener('click', (e) => {
@@ -43,9 +43,7 @@ class Sidebar {
         App.getModal('login').open();
       } else if (e.target.closest('.menu-item_logout')) {
         User.logout((err, response) => {
-          if (err) {
-            console.log('Ошибка!') 
-          } else if (response.success) {
+          if (response.success) {
             App.setState('init');
           }
         });
