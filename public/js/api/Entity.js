@@ -15,9 +15,7 @@
       method: 'GET',
       responseType: 'json',
       data,
-      callback: (err, response) => {
-        callback(err, response);
-      }
+      callback: callback
     });
   }
 
@@ -32,9 +30,7 @@
       method: 'PUT',
       responseType: 'json',
       data,
-      callback: (err, response) => {
-        callback(err, response);
-      }      
+      callback: callback   
     });
   }
 
@@ -48,9 +44,7 @@
       method: 'DELETE',
       responseType: 'json',
       data,
-      callback: (err, response) => {
-        callback(err, response);
-      }      
+      callback: callback    
     });
   }
 }

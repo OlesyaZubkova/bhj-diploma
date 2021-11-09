@@ -14,11 +14,11 @@
     
       const formData = new FormData;
       for (let i in options.data) {
-        formData.append(`${i}`, `${options.data[i]}`);
+        formData.append(i, options.data[i]);
       }
 
       try {
-        xhr.open(`${options.method}`, `${address}`);
+        xhr.open(options.method, address);
         xhr.send(formData);
       }
       catch (err) {
