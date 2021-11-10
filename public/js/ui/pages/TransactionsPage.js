@@ -78,6 +78,12 @@ class TransactionsPage {
         this.renderTitle(response.data.name);
       }
     });
+
+    Transaction.list(options, (err, response) => {
+      if (response, response.success) {
+        this.renderTransactions(response.data);
+      }
+    });
   }
 
   /**
@@ -110,7 +116,34 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML(item) {
-
+    let budget = item.type === 'expense' ? 'transaction_expense' : 'transaction_income';
+    let info = document.createElement('div');
+    return info.innerHTML = 
+    `
+    <div class="transaction ${budget} row">
+    <div class="col-md-7 transaction__details">
+      <div class="transaction__icon">
+          <span class="fa fa-money fa-2x"></span>
+      </div>
+      <div class="transaction__info">
+          <h4 class="transaction__title">${item.name}</h4>
+          <!-- дата -->
+          <div class="transaction__date">${this.formatDate(item.created_at)}</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="transaction__summ">
+          ${item.sum} <span class="currency">₽</span>
+      </div>
+    </div>
+    <div class="col-md-2 transaction__controls">
+        <!-- в data-id нужно поместить id -->
+        <button class="btn btn-danger transaction__remove" data-id=${item.id}>
+            <i class="fa fa-trash"></i>  
+        </button>
+    </div>
+</div>
+`
   }
 
   /**
@@ -118,6 +151,13 @@ class TransactionsPage {
    * используя getTransactionHTML
    * */
   renderTransactions(data) {
+    const content = this.element.querySelector('.content');
+    if (data) {
+      content.innerHTML = '';
 
+      for (let i = 0; i < data.length; i++) {
+        content.innerHTML += this.getTransactionHTML(data[i]);
+      }
+    }
   }
 }
