@@ -36,7 +36,7 @@ class CreateTransactionForm extends AsyncForm {
    * в котором находится форма
    * */
   onSubmit(data) {
-    Transaction.create(data, response => {
+    Transaction.create(data, (err, response) => {
       if (response && response.success) {
         this.element.reset();
         if (this.element.id == 'new-income-form') {

@@ -17,15 +17,14 @@ class TransactionsPage {
 
     this.element = element;
     this.registerEvents();
-
-  }
+  };
 
   /**
    * Вызывает метод render для отрисовки страницы
    * */
   update() {
     this.render(this.lastOptions);
-  }
+  };
 
   /**
    * Отслеживает нажатие на кнопку удаления транзакции
@@ -34,12 +33,11 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
-    const removeAccountBtn = this.element.querySelectorAll('.remove-account');
-    removeAccountBtn.forEach(elem => {
-      elem.addEventListener('click', () => {
-        this.removeAccount();
-      });
+    const removeAccountBtn = document.querySelector('.remove-account');
+    removeAccountBtn.addEventListener('click', () => {
+      this.removeAccount();
     });
+
 
     this.element.addEventListener('click', (e) => {
       if (e.target.closest('.transaction__remove')) {
@@ -47,7 +45,7 @@ class TransactionsPage {
         this.removeTransaction(accountId);
       }
     });
-  }
+  };
 
   /**
    * Удаляет счёт. Необходимо показать диаголовое окно (с помощью confirm())
@@ -59,8 +57,22 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
+    if (this.lastOptions) {
+      const confirmMessage = window.confirm('Вы действительно хотите удалить счёт?');
 
+      if (confirmMessage) {
+        this.lastOptions = {
+          id: this.lastOptions.account_id
+        }
+        Account.remove(this.lastOptions, (err, response) => {
+          if (response && response.success) {
+            App.updateWidgets();
+          };
+        });
+        this.clear();
+    }
   }
+};
 
   /**
    * Удаляет транзакцию (доход или расход). Требует
@@ -76,7 +88,7 @@ class TransactionsPage {
         }
       });
     }
-  }
+  };
 
   /**
    * С помощью Account.get() получает название счёта и отображает
@@ -87,7 +99,7 @@ class TransactionsPage {
   render(options) {
     if (!options) {
       return;
-    }
+    };
     
     this.lastOptions = options;
     
@@ -102,7 +114,7 @@ class TransactionsPage {
         this.renderTransactions(response.data);
       }
     });
-  }
+  };
 
   /**
    * Очищает страницу. Вызывает
@@ -112,23 +124,38 @@ class TransactionsPage {
   clear() {
     this.renderTransactions([]);
     this.renderTitle('Название счета');
-
-  }
+  };
 
   /**
    * Устанавливает заголовок в элемент .content-title
    * */
   renderTitle(name) {
     this.element.querySelector('.content-title').innerText = name;
-  }
+  };
 
   /**
    * Форматирует дату в формате 2019-03-10 03:20:41 (строка)
    * в формат «10 марта 2019 г. в 03:20»
    * */
   formatDate(date) {
+        let newDate = new Date(date),
+        monthes = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
-  }
+    let year = newDate.getFullYear(),
+        month = monthes[newDate.getMonth()],
+        day = newDate.getDay(),
+        hours = newDate.getHours(),
+        minutes = newDate.getMinutes();
+
+        if (hours < 10) {
+          hours = `0${hours}`;
+        } else if (minutes < 10) {
+          minutes = `0${minutes}`;
+        }
+
+        return `${day} ${month} ${year} в ${hours}:${minutes}` // 10 марта 2019 г. в 03:20
+
+  };
 
   /**
    * Формирует HTML-код транзакции (дохода или расхода).
@@ -163,7 +190,7 @@ class TransactionsPage {
     </div>
 </div>
 `
-  }
+  };
 
   /**
    * Отрисовывает список транзакций на странице
@@ -179,4 +206,4 @@ class TransactionsPage {
       }
     }
   }
-}
+};
